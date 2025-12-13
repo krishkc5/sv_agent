@@ -3,6 +3,8 @@
 obj_dir/
 design.sv
 tb.sv
+test_output.txt
 __pycache__/
 *.pyc
 .DS_Store
+.vscode/

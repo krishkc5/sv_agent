@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 try:
-    from openai import OpenAI
+    from openai import OpenAI # type: ignore
 except ImportError:  # pragma: no cover - surfaced at runtime
     OpenAI = None
 
@@ -52,17 +52,21 @@ BASE_PROMPT = """
 Return exactly two SystemVerilog files.
 
 FILE design.sv:
-- One module named design
+- One module named dut
 - Inputs must be explicitly sized
 - Output must be explicitly sized
 - All intermediate math must use explicit width
-- No latches
-- No clocks unless required
+- If sequential logic is needed, use always_ff with posedge clk
+- Add clock and reset inputs only if sequential logic is required
+- Avoid latches unless explicitly requested
 
 FILE tb.sv:
-- Must instantiate design as dut
+- Must instantiate dut module
+- If design has clock, generate clock with: always #5 clk = ~clk;
+- If design has reset, assert reset initially then deassert
 - Must be fully self-checking using assert
-- Must finish simulation
+- Must finish simulation with $finish
+- Must call $dumpfile and $dumpvars to generate VCD
 
 Hard rules:
 - Output ONLY raw SystemVerilog
@@ -139,7 +143,7 @@ def run_verilator():
     subprocess.run("rm -rf obj_dir *.vcd", shell=True)
 
     build = subprocess.run(
-        "verilator --sv --binary design.sv tb.sv --timing --trace --Wall",
+        "verilator --binary -sv design.sv tb.sv --trace -Wno-EOFNEWLINE -Wno-DECLFILENAME",
         shell=True,
         capture_output=True,
         text=True,
@@ -161,6 +165,18 @@ def run_verilator():
     return True, ""
 
 
+def open_surfer():
+    vcd_files = subprocess.run(
+        "ls -t *.vcd 2>/dev/null | head -1",
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    vcd_file = vcd_files.stdout.strip()
+    if vcd_file:
+        subprocess.Popen(["surfer", vcd_file])
+
+
 def main():
     spec = input("Describe the hardware behavior: ").strip()
     error_log = ""
@@ -177,7 +193,7 @@ def main():
 
         design, tb = extract_blocks(raw)
 
-        if design is None:
+        if design is None or tb is None:
             error_log = "Missing <DESIGN> or <TB> tags"
             print("Format failure")
             continue
@@ -192,6 +208,7 @@ def main():
 
         if ok:
             print("PASS")
+            open_surfer()
             return
         else:
             print("Verilator failed:")
