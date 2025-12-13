@@ -1,0 +1,8 @@
+.env
+*.vcd
+obj_dir/
+design.sv
+tb.sv
+__pycache__/
+*.pyc
+.DS_Store

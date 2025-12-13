@@ -1,0 +1,9 @@
+4 bit saturating adder y = a + 2*b capped at 31
+
+8 bit register with enable and synchronous reset
+
+4 to 1 multiplexer
+
+Traffic light FSM with timer
+
+8 bit comparator with gt lt eq
