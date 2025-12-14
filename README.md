@@ -57,17 +57,29 @@ Edit `.env`:
 
 Input: `4-bit adder with carry out`
 
+
+https://github.com/user-attachments/assets/331c5ca3-949e-46b3-94d4-d70abdf7edc3
+
+
 [![4-bit Adder](examples/4b_adder.png)](examples/4b_adder.mov)
 
 ### 4-bit Multiplier
 
 Input: `4-bit multiplier`
 
+
+https://github.com/user-attachments/assets/6bd1e378-8c79-46b3-872c-96ebcc0aede0
+
+
 [![4-bit Multiplier](examples/4b_multiplier.png)](examples/4b_multiplier.mov)
 
 ### 2-bit Counter with Enable
 
 Input: `2-bit counter with enable`
+
+
+https://github.com/user-attachments/assets/332d4f9d-8f77-41ad-9dc2-a2727b6c2f5e
+
 
 [![2-bit Counter](examples/2b_counter_with_enable.png)](examples/2b_counter_with_enable.mov)
 
@@ -77,11 +89,17 @@ Input: `2-bit counter with enable`
 
 Input: `4-bit shift register`
 
+
+https://github.com/user-attachments/assets/541675c0-9b9c-4662-9568-2fbaae21275e
+
+
 This failed because shift registers require clocks and the prompt was ambiguous about the expected behavior.
 
 **Successful attempt** with detailed description:
 
 Input: `4-bit shift register with clock, synchronous reset, serial input, and parallel load. Inputs: clk, reset (active high), load enable, serial_in (1-bit), parallel_in (4-bit). Output: 4-bit parallel_out. When reset is high, output is 0000. When load is high, register loads parallel_in. When load is low, register shifts left bringing in serial_in at LSB. Testbench should load 1010, then shift in 1s to show the shift operation clearly.`
+
+https://github.com/user-attachments/assets/95ed483c-5ad2-4098-ae29-12b70c004811
 
 [![4-bit Shift Register](examples/4b_shift_register_descriptive.png)](examples/4b_shift_register_descriptive.mov)
 
